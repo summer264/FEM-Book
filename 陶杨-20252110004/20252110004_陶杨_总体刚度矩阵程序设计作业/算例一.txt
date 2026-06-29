@@ -1,0 +1,35 @@
+def create_1d_bar_model():
+    model = FEModel()
+    model.Title = "1D bar example"
+    model.nsd = 1
+    model.ndof = 1
+    model.nnp = 3
+    model.nel = 2
+    model.nen = 2
+    model.neq = model.nnp * model.ndof
+
+    model.E = np.array([100.0, 200.0])
+    model.CArea = np.array([1.0, 1.0])
+    model.IEN = np.array([[1, 2], [2, 3]], dtype=int)
+    model.x = np.array([0.0, 1.0, 2.0])
+    model.y = np.array([])
+    model.z = np.array([])
+
+    model.fixed_dof = np.array([1])
+    model.fixed_value = np.array([0.0])
+    model.force_dof = np.array([2, 3])
+    model.force_value = np.array([0.0, 10.0])
+
+    model.K = np.zeros((model.neq, model.neq))
+    model.f = np.zeros(model.neq)
+    model.d = np.zeros(model.neq)
+    model.length = np.zeros(model.nel)
+    model.stress = np.zeros(model.nel)
+    model.reaction = np.zeros(model.neq)
+
+    for dof, val in zip(model.force_dof, model.force_value):
+        model.f[dof - 1] = val
+    for dof, val in zip(model.fixed_dof, model.fixed_value):
+        model.d[dof - 1] = val
+
+    return model
